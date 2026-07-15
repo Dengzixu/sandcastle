@@ -1,6 +1,12 @@
 *.mwb
 *.mwb.bak
 
+*.yml
+*.yaml
+!*.exmaple.yml
+!*.exmaple.yaml
+
+
 # Created by https://www.toptal.com/developers/gitignore/api/java,linux,macos,maven,gradle,windows,visualstudiocode,intellij+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,linux,macos,maven,gradle,windows,visualstudiocode,intellij+all
 
