@@ -8,15 +8,12 @@ import io.toolongname.sandcastle.entity.vo.file.*;
 import io.toolongname.sandcastle.model.ResponseData;
 import io.toolongname.sandcastle.services.FileService;
 import io.toolongname.sandcastlecommon.misc.annotation.JwtDecode;
-import io.toolongname.sandcastlecommon.misc.exception.file.FileNotExistException;
-import io.toolongname.sandcastlecommon.misc.exception.file.FileTypeNotAllowed;
 import io.toolongname.sandcastlecommon.misc.exception.user.TokenInvalidException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,7 +66,7 @@ public class FileApiController {
     @GetMapping("/v1/id/{id}")
     public ResponseEntity<ResponseData> getById(@PathVariable long id,
                                                 @JwtDecode Optional<String> userUuidOptional) {
-        FileBO fileBO = fileService.getById(id);
+        FileBO fileBO = fileService.readById(id);
         ObjectBO objectBO = fileService.getObjectByUuid(fileBO.objectUuid());
 
         FileVO fileVO = FileVO.fromFileBO(fileBO);
@@ -82,7 +79,7 @@ public class FileApiController {
     public ResponseEntity<ResponseData> getByUuid(@PathVariable(name = "uuid") String fileUuidStr,
                                                   @JwtDecode Optional<String> userUuidOptional) {
 
-        FileBO fileBO = fileService.readByUUID(UUIDUtil.uuid(fileUuidStr));
+        FileBO fileBO = fileService.readByUuid(UUIDUtil.uuid(fileUuidStr));
         ObjectBO objectBO = fileService.getObjectByUuid(fileBO.objectUuid());
 
         FileVO fileVO = FileVO.fromFileBO(fileBO);

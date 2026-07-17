@@ -47,19 +47,27 @@ public interface FileService {
                  UUID userUuid);
 
     /**
-     * 读取文件
+     * 根据文件 UUID 读取文件信息。
      *
-     * @param fileUuid 文件 UUID
-     * @return FileBO
+     * @param fileUuid 文件的 UUID
+     * @return 包含文件信息的 FileBO 对象；
      */
-    FileBO readByUUID(UUID fileUuid);
+    FileBO readByUuid(UUID fileUuid);
+
+    /**
+     * 根据文件 ID 读取文件信息。
+     *
+     * @param id 文件的 ID
+     * @return 包含文件信息的 FileBO 对象；
+     */
+    FileBO readById(long id);
 
     /**
      * 将文件标记为过期
      *
-     * @param fileUuid 要标记为过期的文件 UUID
+     * @param id 要标记为过期的文件 id
      */
-    void markExpire(UUID fileUuid);
+    void markExpire(long id);
 
     /**
      * 根据文件 ID 获取文件实体。

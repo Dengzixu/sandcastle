@@ -191,7 +191,7 @@ public class FileServiceImpl implements FileService {
 
         if ((fileDO.getStatus() & Status.File.WATTING_PUBLISH) == Status.File.WATTING_PUBLISH) {
             Integer newStatus = fileDO.getStatus() ^ Status.File.WATTING_PUBLISH;
-            fileMapper.modifyByUuid(UUIDUtil.asByteArray(fileUuid), newStatus, flag, new byte[80], expireTimestamp);
+            fileMapper.modifyById(fileDO.getId(), newStatus, flag, new byte[80], expireTimestamp);
         } else {
             LOGGER.warn("文件: [{}] 已发布。", fileUuid);
         }
@@ -200,8 +200,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public FileBO readByUUID(UUID fileUuid) {
-        FileDO fileDO = fileMapper.queryByUuid(UUIDUtil.asByteArray(fileUuid))
+    public FileBO readByUuid(UUID fileUuid) {
+        return fileMapper.queryByUuid(UUIDUtil.asByteArray(fileUuid))
+                .map(f -> readById(f.getId()))
+                .orElseThrow(FileNotExistException::new);
+    }
+
+    @Override
+    public FileBO readById(long id) {
+        FileDO fileDO = fileMapper.queryById(id)
                 .filter(f -> !(this.isDeleted(f.getStatus())))
                 .filter(f -> !(this.isExpired(f.getStatus())))
                 .orElseThrow(FileNotExistException::new);
@@ -214,7 +221,7 @@ public class FileServiceImpl implements FileService {
                     Instant.ofEpochSecond(fileDO.getExpireTimestamp())
                             .atZone(ZoneId.of(TimeZone.ASIA_SHANGHAI))
                             .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            this.markExpire(fileUuid);
+            this.markExpire(id);
             throw new FileNotExistException();
         }
 
@@ -222,8 +229,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void markExpire(UUID fileUuid) {
-        FileDO fileDO = fileMapper.queryByUuid(UUIDUtil.asByteArray(fileUuid))
+    public void markExpire(long id) {
+        FileDO fileDO = fileMapper.queryById(id)
                 .filter(f -> !(this.isDeleted(f.getStatus())))
                 .orElseThrow(FileNotExistException::new);
 
@@ -234,7 +241,7 @@ public class FileServiceImpl implements FileService {
         }
         status = status | Status.File.EXPIRED;
 
-        fileMapper.modifyByUuid(UUIDUtil.asByteArray(fileUuid), status, null, null, 0L);
+        fileMapper.modifyById(fileDO.getId(), status, null, null, 0L);
     }
 
     @Override

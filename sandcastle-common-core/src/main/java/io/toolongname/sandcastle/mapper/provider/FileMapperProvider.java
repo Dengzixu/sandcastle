@@ -39,7 +39,7 @@ public class FileMapperProvider {
         }}.toString();
     }
 
-    public String modifyByUuidSqlBuilder(Integer status, Long flag, byte[] password, Long expireTimestamp) {
+    public String modifyByIdSqlBuilder(Integer status, Long flag, byte[] password, Long expireTimestamp) {
         return new SQL() {{
             UPDATE(SANDCASTLE_FILE_TABLE_NAME);
             if (null != status) {
@@ -58,8 +58,7 @@ public class FileMapperProvider {
                 SET("expire_timestamp = #{expireTimestamp}");
             }
 
-            WHERE("uuid = #{fileUuid}");
+            WHERE("id = #{id}");
         }}.toString();
     }
-
 }
