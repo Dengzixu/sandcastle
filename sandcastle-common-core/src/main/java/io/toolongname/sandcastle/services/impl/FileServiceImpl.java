@@ -23,6 +23,7 @@ import io.toolongname.sandcastlecommon.misc.exception.general.PermissionDeniedEx
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -200,20 +201,40 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileBO readByUUID(UUID fileUuid) {
-        FileBO fileBO = this.getByUuid(fileUuid);
+        FileDO fileDO = fileMapper.queryByUuid(UUIDUtil.asByteArray(fileUuid))
+                .filter(f -> !(this.isDeleted(f.getStatus())))
+                .filter(f -> !(this.isExpired(f.getStatus())))
+                .orElseThrow(FileNotExistException::new);
 
-        // 判断文件是否过期
+        // 二次判断文件是否过期
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of(TimeZone.ASIA_SHANGHAI));
-        if (fileBO.expireTimestamp() <= now.toEpochSecond()) {
-            LOGGER.warn("文件: [{}] 已过期。过期时间: {}",
-                    fileBO.uuid(),
-                    Instant.ofEpochSecond(fileBO.expireTimestamp())
+        if (fileDO.getExpireTimestamp() <= now.toEpochSecond()) {
+            LOGGER.warn("文件: [{}] 已过期，但尚未标记。过期时间: {}",
+                    UUIDUtil.uuid(fileDO.getUuid()),
+                    Instant.ofEpochSecond(fileDO.getExpireTimestamp())
                             .atZone(ZoneId.of(TimeZone.ASIA_SHANGHAI))
                             .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            this.markExpire(fileUuid);
             throw new FileNotExistException();
         }
 
-        return fileBO;
+        return FileBO.fromFileDo(fileDO);
+    }
+
+    @Override
+    public void markExpire(UUID fileUuid) {
+        FileDO fileDO = fileMapper.queryByUuid(UUIDUtil.asByteArray(fileUuid))
+                .filter(f -> !(this.isDeleted(f.getStatus())))
+                .orElseThrow(FileNotExistException::new);
+
+        int status = fileDO.getStatus();
+
+        if (this.isExpired(status)) {
+            return;
+        }
+        status = status | Status.File.EXPIRED;
+
+        fileMapper.modifyByUuid(UUIDUtil.asByteArray(fileUuid), status, null, null, 0);
     }
 
     @Override

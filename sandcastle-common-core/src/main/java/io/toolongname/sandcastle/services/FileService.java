@@ -54,20 +54,43 @@ public interface FileService {
      */
     FileBO readByUUID(UUID fileUuid);
 
+    /**
+     * 将文件标记为过期
+     *
+     * @param fileUuid 要标记为过期的文件 UUID
+     */
+    void markExpire(UUID fileUuid);
+
+    /**
+     * 根据文件 ID 获取文件实体。
+     *
+     * @param id 文件的 ID
+     * @return 包含文件信息的 FileBO 对象
+     */
     FileBO getById(long id);
 
     /**
-     * 根据UUID获取文件实体。
+     * 根据 UUID 获取文件实体。
      *
-     * @param fileUuid 要检索的文件的UUID
-     * @return 包含文件信息的FileBO对象
+     * @param fileUuid 要检索的文件的 UUID
+     * @return 包含文件信息的 FileBO 对象
      */
     FileBO getByUuid(UUID fileUuid);
 
+    /**
+     * 根据对象 UUID 获取文件对象实体。
+     *
+     * @param objectUuid 对象的 UUID
+     * @return 包含文件对象信息的 ObjectBO 对象
+     */
     ObjectBO getObjectByUuid(UUID objectUuid);
 
     default boolean allowImageType(String contentType) {
         return Constant.MEDIA_TYPES.containsKey(contentType);
+    }
+
+    default boolean isExpired(int status) {
+        return (status & Status.File.EXPIRED) == Status.File.EXPIRED;
     }
 
     default boolean isDeleted(int status) {
