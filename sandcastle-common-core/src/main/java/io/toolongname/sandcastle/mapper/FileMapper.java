@@ -27,5 +27,5 @@ public interface FileMapper {
     Optional<FileDO> queryByUuid(byte[] fileUuid);
 
     @UpdateProvider(type = FileMapperProvider.class, method = "modifyByUuidSqlBuilder")
-    void modifyByUuid(byte[] fileUuid, Integer status, Long flag, byte[] password, long expireTimestamp);
+    void modifyByUuid(byte[] fileUuid, Integer status, Long flag, byte[] password, Long expireTimestamp);
 }

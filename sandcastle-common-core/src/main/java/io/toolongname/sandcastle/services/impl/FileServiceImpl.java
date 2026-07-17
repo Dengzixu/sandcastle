@@ -234,7 +234,7 @@ public class FileServiceImpl implements FileService {
         }
         status = status | Status.File.EXPIRED;
 
-        fileMapper.modifyByUuid(UUIDUtil.asByteArray(fileUuid), status, null, null, 0);
+        fileMapper.modifyByUuid(UUIDUtil.asByteArray(fileUuid), status, null, null, 0L);
     }
 
     @Override
