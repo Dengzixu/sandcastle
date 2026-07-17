@@ -153,7 +153,7 @@ public class FileServiceImpl implements FileService {
         Optional<ObjectDO> optionalObjectDO = objectMapper.queryBySha512(sha512Bytes);
         if (optionalObjectDO.isPresent()) {
             UUID existingObjectUuid = UUIDUtil.uuid(optionalObjectDO.get().getUuid());
-            LOGGER.warn("对象已存在，跳过上传，对象 UUID: {}", existingObjectUuid);
+            LOGGER.info("对象已存在，跳过上传，对象 UUID: {}", existingObjectUuid);
             return existingObjectUuid;
         }
 
