@@ -6,6 +6,7 @@
 !*.exmaple.yml
 !*.exmaple.yaml
 
+/temp/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,linux,macos,maven,gradle,windows,visualstudiocode,intellij+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,linux,macos,maven,gradle,windows,visualstudiocode,intellij+all
