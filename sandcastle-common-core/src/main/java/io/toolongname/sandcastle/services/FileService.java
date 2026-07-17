@@ -70,22 +70,6 @@ public interface FileService {
     void markExpire(long id);
 
     /**
-     * 根据文件 ID 获取文件实体。
-     *
-     * @param id 文件的 ID
-     * @return 包含文件信息的 FileBO 对象
-     */
-    FileBO getById(long id);
-
-    /**
-     * 根据 UUID 获取文件实体。
-     *
-     * @param fileUuid 要检索的文件的 UUID
-     * @return 包含文件信息的 FileBO 对象
-     */
-    FileBO getByUuid(UUID fileUuid);
-
-    /**
      * 根据对象 UUID 获取文件对象实体。
      *
      * @param objectUuid 对象的 UUID

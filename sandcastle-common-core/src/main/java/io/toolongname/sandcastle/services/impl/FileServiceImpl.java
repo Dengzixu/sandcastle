@@ -245,26 +245,6 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public FileBO getById(long id) {
-        FileBO fileBO = FileBO
-                .fromFileDo(fileMapper.queryById(id)
-                        .filter(fileDO -> !this.isDeleted(fileDO.getStatus()))
-                        .orElseThrow(FileNotExistException::new));
-
-        return fileBO;
-    }
-
-    @Override
-    public FileBO getByUuid(UUID fileUuid) {
-        FileBO fileBO = FileBO
-                .fromFileDo(fileMapper.queryByUuid(UUIDUtil.asByteArray(fileUuid))
-                        .filter(fileDO -> !this.isDeleted(fileDO.getStatus()))
-                        .orElseThrow(FileNotExistException::new));
-
-        return fileBO;
-    }
-
-    @Override
     public ObjectBO getObjectByUuid(UUID objectUuid) {
         ObjectDO objectDO = objectMapper.queryByUuid(UUIDUtil.asByteArray(objectUuid)).orElseThrow(FileNotExistException::new);
 
