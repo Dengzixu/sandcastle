@@ -21,7 +21,7 @@ public class Password {
 
         switch (keyLength) {
             case 256 -> this.algorithm = "PBKDF2WithHmacSHA256";
-            case 512-> this.algorithm = "PBKDF2WithHmacSHA512";
+            case 512 -> this.algorithm = "PBKDF2WithHmacSHA512";
             default -> throw new NoSuchAlgorithmException();
         }
     }

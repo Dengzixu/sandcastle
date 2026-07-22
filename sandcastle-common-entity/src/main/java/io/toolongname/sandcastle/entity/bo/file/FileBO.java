@@ -3,7 +3,6 @@ package io.toolongname.sandcastle.entity.bo.file;
 import com.fasterxml.uuid.impl.UUIDUtil;
 import io.toolongname.sandcastle.entity.dataobject.file.FileDO;
 
-import java.util.Date;
 import java.util.UUID;
 
 public record FileBO(long id,

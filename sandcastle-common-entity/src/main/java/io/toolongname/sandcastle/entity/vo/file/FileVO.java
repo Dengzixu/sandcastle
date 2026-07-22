@@ -1,7 +1,6 @@
 package io.toolongname.sandcastle.entity.vo.file;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.toolongname.sandcastle.entity.bo.file.FileBO;
 

@@ -1,6 +1,5 @@
 package io.toolongname.sandcastle.mapper;
 
-import io.toolongname.sandcastle.entity.bo.file.FileBO;
 import io.toolongname.sandcastle.entity.dataobject.file.FileDO;
 import io.toolongname.sandcastle.mapper.provider.FileMapperProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -9,7 +8,6 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.Optional;
 
 @Mapper

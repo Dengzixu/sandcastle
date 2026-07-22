@@ -1,13 +1,15 @@
 package io.toolongname.sandcastle.utils;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.Date;
 
 public class JsonWebToken {

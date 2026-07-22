@@ -5,7 +5,6 @@ import io.toolongname.sandcastle.entity.bo.file.FileBO;
 import io.toolongname.sandcastle.entity.bo.file.ObjectBO;
 import io.toolongname.sandcastle.entity.dto.file.PublishDTO;
 import io.toolongname.sandcastle.entity.vo.file.*;
-import io.toolongname.sandcastle.model.ResponseData;
 import io.toolongname.sandcastle.services.FileService;
 import io.toolongname.sandcastlecommon.misc.annotation.JwtDecode;
 import io.toolongname.sandcastlecommon.misc.exception.user.TokenInvalidException;

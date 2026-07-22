@@ -1,7 +1,6 @@
 package io.toolongname.sandcastle.entity.dataobject.file;
 
 import java.util.Arrays;
-import java.util.Date;
 
 public class FileDO {
     private long id;

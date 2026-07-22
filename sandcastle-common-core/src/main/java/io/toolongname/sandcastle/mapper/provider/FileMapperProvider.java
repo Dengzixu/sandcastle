@@ -1,7 +1,6 @@
 package io.toolongname.sandcastle.mapper.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import org.jspecify.annotations.Nullable;
 
 public class FileMapperProvider {
 

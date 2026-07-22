@@ -6,7 +6,6 @@ import io.toolongname.sandcastle.entity.dto.user.RegisterDTO;
 import io.toolongname.sandcastle.entity.vo.user.LoginVO;
 import io.toolongname.sandcastle.entity.vo.user.UserVO;
 import io.toolongname.sandcastle.entity.vo.user.VerifyVO;
-import io.toolongname.sandcastle.model.ResponseData;
 import io.toolongname.sandcastle.property.JwtProperty;
 import io.toolongname.sandcastle.services.UserService;
 import io.toolongname.sandcastle.utils.JsonWebToken;
@@ -14,9 +13,6 @@ import io.toolongname.sandcastlecommon.misc.exception.user.TokenInvalidException
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import tools.jackson.databind.annotation.JsonNaming;
-
-import java.util.HashMap;
 
 @RestController()
 @RequestMapping("/user/api")

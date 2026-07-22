@@ -2,7 +2,6 @@ package io.toolongname.sandcastle.entity.bo.file;
 
 import com.fasterxml.uuid.impl.UUIDUtil;
 import io.toolongname.sandcastle.entity.dataobject.file.ObjectDO;
-import io.toolongname.sandcastle.entity.dataobject.user.UserDO;
 
 import java.util.UUID;
 

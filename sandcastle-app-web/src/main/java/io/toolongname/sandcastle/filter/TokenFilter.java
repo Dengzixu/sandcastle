@@ -1,16 +1,13 @@
 package io.toolongname.sandcastle.filter;
 
-import io.toolongname.sandcastle.model.ResponseData;
 import io.toolongname.sandcastle.property.JwtProperty;
-import io.toolongname.sandcastle.utils.JsonWebToken;
-import io.toolongname.sandcastlecommon.misc.enums.ErrorCode;
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;

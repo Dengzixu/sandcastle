@@ -1,7 +1,6 @@
 package io.toolongname.sandcastle.mapper.provider;
 
 import org.apache.ibatis.jdbc.SQL;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 public class ObjectMapperProvider {
     private static final String SANDCASTLE_OBJECT_TABLE_NAME = "sandcastle_object";
