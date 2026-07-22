@@ -14,6 +14,8 @@ public enum ErrorCode {
 
     DATA_VALIDATION_FAILED(-1800_0001, "请求数据错误"),
 
+    HUMAN_MACHINE_VERIFICATION_FAILED(-1700_0001, "人机校验失败"),
+
     UNAUTHORIZED(-1900_0401, "未授权，请检查 Token"),
     PERMISSION_DENIED(-1900_0403, "权限不足"),
     INTERNAL_SERVER_ERROR(-1900_0500, "内部错误"),

@@ -2,6 +2,7 @@ package io.toolongname.sandcastle.component.impl;
 
 
 import io.toolongname.sandcastle.component.SecurityComponent;
+import io.toolongname.sandcastle.property.SecurityProperty;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -17,19 +18,24 @@ import java.util.Map;
 
 @Component
 public class SecurityComponentImpl implements SecurityComponent {
+    private final SecurityProperty securityProperty;
 
-    private static final String secret = "1x0000000000000000000000000000000AA";
+    public SecurityComponentImpl(SecurityProperty securityProperty) {
+        this.securityProperty = securityProperty;
+    }
 
     @Override
-    public void turnstileVerify(String token) {
+    public boolean turnstileVerify(String token) {
         final URI uri = URI.create("https://challenges.cloudflare.com/turnstile/v0/siteverify");
 
         Map<String, String> bodyMap = new LinkedHashMap<>();
 
-        bodyMap.put("secret", secret);
+        bodyMap.put("secret", securityProperty.turnstile().secretKey());
         bodyMap.put("response", token);
 
-        HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
+        HttpClient httpClient = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -37,7 +43,6 @@ public class SecurityComponentImpl implements SecurityComponent {
                 .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(bodyMap)))
                 .setHeader("Content-Type", "application/json")
                 .build();
-
 
         JsonNode node;
         try {
@@ -48,13 +53,13 @@ public class SecurityComponentImpl implements SecurityComponent {
         }
 
         if (!node.get("success").asBoolean(false)) {
-            throw new RuntimeException();
+            return false;
         }
 
         try (httpClient) {
             // do nothing
         }
+
+        return true;
     }
-
-
 }
