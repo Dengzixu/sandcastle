@@ -5,6 +5,7 @@ import io.toolongname.sandcastle.entity.dto.user.LoginDTO;
 import io.toolongname.sandcastle.entity.dto.user.RegisterDTO;
 import io.toolongname.sandcastle.entity.vo.user.LoginVO;
 import io.toolongname.sandcastle.entity.vo.user.UserVO;
+import io.toolongname.sandcastle.entity.vo.user.VerifyVO;
 import io.toolongname.sandcastle.model.ResponseData;
 import io.toolongname.sandcastle.property.JwtProperty;
 import io.toolongname.sandcastle.services.UserService;
@@ -13,6 +14,7 @@ import io.toolongname.sandcastlecommon.misc.exception.user.TokenInvalidException
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.annotation.JsonNaming;
 
 import java.util.HashMap;
 
@@ -37,7 +39,7 @@ public class UserApiController {
     }
 
     @PostMapping("/v1/login")
-    public ResponseEntity<ResponseData> login(@RequestBody @Validated LoginDTO loginDTO) {
+    public ResponseEntity<LoginVO> login(@RequestBody @Validated LoginDTO loginDTO) {
         UserBO userBO = userService.loginByEmail(loginDTO.email(), loginDTO.password());
 
         JsonWebToken jwt = new JsonWebToken(jwtProperty.validityPeriod(),
@@ -53,11 +55,11 @@ public class UserApiController {
                 .compact();
         LoginVO loginVO = new LoginVO(userVO, token);
 
-        return ResponseEntity.ok(ResponseData.SUCCEEDED_WITH_DATA(loginVO));
+        return ResponseEntity.ok(loginVO);
     }
 
     @GetMapping("/v1/token/verify")
-    public ResponseEntity<ResponseData> verifyToken(@RequestHeader(value = "Authorization") String token) {
+    public ResponseEntity<VerifyVO> verifyToken(@RequestHeader(value = "Authorization") String token) {
         JsonWebToken jwt = new JsonWebToken(jwtProperty.validityPeriod(),
                 jwtProperty.base64Secret(),
                 jwtProperty.algorithm());
@@ -72,8 +74,6 @@ public class UserApiController {
         UserBO userBO = userService.getByUuid(userUuid);
         UserVO userVO = UserVO.fromUserBO(userBO);
 
-        return ResponseEntity.ok(ResponseData.SUCCEEDED_WITH_DATA(new HashMap<>() {{
-            put("user", userVO);
-        }}));
+        return ResponseEntity.ok(new VerifyVO(userVO));
     }
 }

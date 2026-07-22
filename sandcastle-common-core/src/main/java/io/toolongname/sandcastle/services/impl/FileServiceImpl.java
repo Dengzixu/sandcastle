@@ -170,11 +170,11 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public UUID publish(UUID fileUuid,
-                        @org.jspecify.annotations.Nullable Long flag,
-                        @org.jspecify.annotations.Nullable String password,
-                        int validityPeriod,
-                        UUID userUuid) {
+    public FileBO publish(UUID fileUuid,
+                          @org.jspecify.annotations.Nullable Long flag,
+                          @org.jspecify.annotations.Nullable String password,
+                          int validityPeriod,
+                          UUID userUuid) {
         FileDO fileDO = fileMapper.queryByUuid(UUIDUtil.asByteArray(fileUuid))
                 .filter(e -> !this.isDeleted(e.getStatus()))
                 .orElseThrow(FileNotExistException::new);
@@ -184,19 +184,21 @@ public class FileServiceImpl implements FileService {
             throw new PermissionDeniedException();
         }
 
-        // 计算过期时间
-        long expireTimestamp = ZonedDateTime.now(ZoneId.of(TimeZone.ASIA_SHANGHAI))
-                .plusDays(validityPeriod)
-                .toEpochSecond();
-
         if ((fileDO.getStatus() & Status.File.WATTING_PUBLISH) == Status.File.WATTING_PUBLISH) {
             Integer newStatus = fileDO.getStatus() ^ Status.File.WATTING_PUBLISH;
+
+            // 计算过期时间
+            long expireTimestamp = ZonedDateTime.now(ZoneId.of(TimeZone.ASIA_SHANGHAI))
+                    .plusDays(validityPeriod)
+                    .toEpochSecond();
+
             fileMapper.modifyById(fileDO.getId(), newStatus, flag, new byte[80], expireTimestamp);
         } else {
             LOGGER.warn("文件: [{}] 已发布。", fileUuid);
         }
 
-        return fileUuid;
+        FileBO newFileBO = FileBO.fromFileDo(fileMapper.queryById(fileDO.getId()).get());
+        return newFileBO;
     }
 
     @Override

@@ -29,8 +29,8 @@ public class FileApiController {
     }
 
     @PostMapping("/v1/upload")
-    public ResponseEntity<ResponseData> upload(@RequestParam("file") MultipartFile multipartFile,
-                                               @JwtDecode Optional<String> userUuidOptional) {
+    public ResponseEntity<UploadVO> upload(@RequestParam("file") MultipartFile multipartFile,
+                                           @JwtDecode Optional<String> userUuidOptional) {
         UUID userUuid = UUIDUtil.uuid(userUuidOptional.orElseThrow(TokenInvalidException::new));
 
         UUID fileUuid;
@@ -44,48 +44,47 @@ public class FileApiController {
             throw new RuntimeException(e);
         }
 
-        return ResponseEntity.ok(ResponseData.SUCCEEDED_WITH_DATA(new UploadVO(fileUuid.toString())));
+        return ResponseEntity.ok(new UploadVO(fileUuid.toString()));
     }
 
     @PostMapping("/v1/publish")
-    public ResponseEntity<ResponseData> publish(@RequestBody @Validated PublishDTO publishDTO,
-                                                @JwtDecode Optional<String> userUuidOptional) {
+    public ResponseEntity<PublishVO> publish(@RequestBody @Validated PublishDTO publishDTO,
+                                             @JwtDecode Optional<String> userUuidOptional) {
         UUID userUuid = UUIDUtil.uuid(userUuidOptional.orElseThrow(TokenInvalidException::new));
         UUID fileUuid = UUIDUtil.uuid(publishDTO.fileUuid());
 
-        fileService.publish(fileUuid,
+        FileBO fileBO = fileService.publish(fileUuid,
                 publishDTO.flag(),
                 publishDTO.password(),
                 publishDTO.validityPeriod(),
                 userUuid);
 
-        return ResponseEntity.ok(ResponseData.SUCCEEDED_WITH_DATA(new PublishVO(fileUuid.toString())));
+        return ResponseEntity.ok(new PublishVO(fileBO.id(), fileBO.uuid().toString()));
     }
 
 
     @GetMapping("/v1/id/{id}")
-    public ResponseEntity<ResponseData> getById(@PathVariable long id,
-                                                @JwtDecode Optional<String> userUuidOptional) {
+    public ResponseEntity<GetFileVO> getById(@PathVariable long id,
+                                             @JwtDecode Optional<String> userUuidOptional) {
         FileBO fileBO = fileService.readById(id);
         ObjectBO objectBO = fileService.getObjectByUuid(fileBO.objectUuid());
 
         FileVO fileVO = FileVO.fromFileBO(fileBO);
         ObjectVO objectVO = ObjectVO.fromObjectBO(objectBO);
 
-        return ResponseEntity.ok(ResponseData.SUCCEEDED_WITH_DATA(new GetFileVO(fileVO, objectVO)));
+        return ResponseEntity.ok(new GetFileVO(fileVO, objectVO));
     }
 
     @GetMapping("/v1/uuid/{uuid}")
-    public ResponseEntity<ResponseData> getByUuid(@PathVariable(name = "uuid") String fileUuidStr,
-                                                  @JwtDecode Optional<String> userUuidOptional) {
-
+    public ResponseEntity<GetFileVO> getByUuid(@PathVariable(name = "uuid") String fileUuidStr,
+                                               @JwtDecode Optional<String> userUuidOptional) {
         FileBO fileBO = fileService.readByUuid(UUIDUtil.uuid(fileUuidStr));
         ObjectBO objectBO = fileService.getObjectByUuid(fileBO.objectUuid());
 
         FileVO fileVO = FileVO.fromFileBO(fileBO);
         ObjectVO objectVO = ObjectVO.fromObjectBO(objectBO);
 
-        return ResponseEntity.ok(ResponseData.SUCCEEDED_WITH_DATA(new GetFileVO(fileVO, objectVO)));
+        return ResponseEntity.ok(new GetFileVO(fileVO, objectVO));
     }
 
 }

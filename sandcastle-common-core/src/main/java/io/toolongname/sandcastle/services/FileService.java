@@ -40,7 +40,7 @@ public interface FileService {
      * @param userUuid 用户 UUID
      * @return 文件 UUID
      */
-    UUID publish(UUID fileUuid,
+    FileBO publish(UUID fileUuid,
                  @org.jspecify.annotations.Nullable Long flag,
                  @org.jspecify.annotations.Nullable String password,
                  int validityPeriod,

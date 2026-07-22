@@ -2,6 +2,6 @@ package io.toolongname.sandcastle.component;
 
 public interface SecurityComponent {
 
-    void turnstileVerify(String token);
+    boolean turnstileVerify(String token);
 
 }
