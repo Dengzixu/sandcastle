@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
+@Deprecated
 public class Password {
     // 迭代次数
     private final int iterations;

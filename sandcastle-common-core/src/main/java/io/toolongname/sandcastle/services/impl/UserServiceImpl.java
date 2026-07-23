@@ -6,8 +6,7 @@ import io.toolongname.sandcastle.entity.bo.user.UserBO;
 import io.toolongname.sandcastle.entity.dataobject.user.UserDO;
 import io.toolongname.sandcastle.mapper.UserMapper;
 import io.toolongname.sandcastle.services.UserService;
-import io.toolongname.sandcastle.utils.Password;
-import io.toolongname.sandcastlecommon.misc.constant.Constant;
+import io.toolongname.sandcastle.utils.password.Password;
 import io.toolongname.sandcastlecommon.misc.constant.Status;
 import io.toolongname.sandcastlecommon.misc.exception.user.EmailDuplicateException;
 import io.toolongname.sandcastlecommon.misc.exception.user.UserNotExistException;
@@ -16,9 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.nio.ByteBuffer;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Service
@@ -47,24 +43,9 @@ public class UserServiceImpl implements UserService {
         // 生成 UUID
         UUID userUuid = Generators.timeBasedEpochRandomGenerator().generate();
 
-        // 生成 slat
-        byte[] salt = Password.getSalt(Constant.SALT_LENGTH_BYTE);
-        byte[] encryptedPasswordBytes = new byte[Constant.SHA_512_LENGTH_BYTE];
+        Password password = Password.fromPlaintext(plaintextPassword, Password.randomSalt());
 
-        // 加密密码
-        try {
-            encryptedPasswordBytes = new Password(Constant.SHA_512_LENGTH_BIT).hashed(plaintextPassword, salt);
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("密码加密错误", e);
-        }
-
-        // 合并密码与 Salt
-        ByteBuffer passwordBuffer = ByteBuffer.allocate(Constant.SHA_512_LENGTH_BYTE + Constant.SALT_LENGTH_BYTE);
-        passwordBuffer.put(encryptedPasswordBytes);
-        passwordBuffer.put(salt);
-        passwordBuffer.flip();
-
-        userMapper.add(UUIDUtil.asByteArray(userUuid), Status.User.DEFAULT, username, email, passwordBuffer.array());
+        userMapper.add(UUIDUtil.asByteArray(userUuid), Status.User.DEFAULT, username, email, password.asByteArray());
     }
 
     @Override
@@ -74,25 +55,11 @@ public class UserServiceImpl implements UserService {
                 .filter(u -> !this.isUserDeleted(u.getStatus()))
                 .orElseThrow(UserNotExistException::new);
 
-        byte[] pwd = new byte[Constant.SHA_512_LENGTH_BYTE];
-        byte[] salt = new byte[Constant.SALT_LENGTH_BYTE];
+        Password dbPassword = Password.fromCombinedByteArray(userDO.getPassword());
 
-        // 分离密码
-        ByteBuffer passwordBuffer = ByteBuffer.wrap(userDO.getPassword());
-        passwordBuffer.get(pwd);
-        passwordBuffer.get(salt);
+        final byte[] salt = dbPassword.salt();
 
-
-        // 加密密码
-        byte[] encryptedPasswordBytes = new byte[Constant.SHA_512_LENGTH_BYTE];
-        try {
-            encryptedPasswordBytes = new Password(Constant.SHA_512_LENGTH_BIT).hashed(plaintextPassword, salt);
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("密码加密错误", e);
-        }
-
-        // 判断密码是否正确
-        if (!Arrays.equals(encryptedPasswordBytes, pwd)) {
+        if (!dbPassword.equals(Password.fromPlaintext(plaintextPassword, salt))) {
             throw new UserNotExistException();
         }
 
