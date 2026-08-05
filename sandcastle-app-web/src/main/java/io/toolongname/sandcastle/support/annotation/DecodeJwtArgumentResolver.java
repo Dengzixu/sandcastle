@@ -1,6 +1,6 @@
 package io.toolongname.sandcastle.support.annotation;
 
-import io.toolongname.sandcastle.property.JwtProperty;
+import io.toolongname.sandcastle.property.SecurityProperty;
 import io.toolongname.sandcastle.utils.JsonWebToken;
 import io.toolongname.sandcastlecommon.misc.annotation.JwtDecode;
 import io.toolongname.sandcastlecommon.misc.exception.general.UnauthorizedException;
@@ -16,11 +16,11 @@ import java.util.Optional;
 
 @Component
 public class DecodeJwtArgumentResolver implements HandlerMethodArgumentResolver {
-    private final JwtProperty jwtProperty;
+    private final SecurityProperty securityProperty;
 
 
-    public DecodeJwtArgumentResolver(JwtProperty jwtProperty) {
-        this.jwtProperty = jwtProperty;
+    public DecodeJwtArgumentResolver(SecurityProperty securityProperty) {
+        this.securityProperty = securityProperty;
     }
 
     @Override
@@ -44,7 +44,9 @@ public class DecodeJwtArgumentResolver implements HandlerMethodArgumentResolver 
             throw new UnauthorizedException();
         }
 
-        JsonWebToken jsonWebToken = new JsonWebToken(jwtProperty.validityPeriod(), jwtProperty.base64Secret(), jwtProperty.algorithm());
+        JsonWebToken jsonWebToken = new JsonWebToken(securityProperty.jwt().validityPeriod(),
+                securityProperty.jwt().base64Secret(),
+                securityProperty.jwt().algorithm());
 
         try {
             return Optional.ofNullable(jsonWebToken.decoder(token).getSubject());

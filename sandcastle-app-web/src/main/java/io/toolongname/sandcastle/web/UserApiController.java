@@ -6,7 +6,7 @@ import io.toolongname.sandcastle.entity.dto.user.RegisterDTO;
 import io.toolongname.sandcastle.entity.vo.user.LoginVO;
 import io.toolongname.sandcastle.entity.vo.user.UserVO;
 import io.toolongname.sandcastle.entity.vo.user.VerifyVO;
-import io.toolongname.sandcastle.property.JwtProperty;
+import io.toolongname.sandcastle.property.SecurityProperty;
 import io.toolongname.sandcastle.services.UserService;
 import io.toolongname.sandcastle.utils.JsonWebToken;
 import io.toolongname.sandcastlecommon.misc.exception.user.TokenInvalidException;
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user/api")
 @CrossOrigin(origins = "*")
 public class UserApiController {
-    private final JwtProperty jwtProperty;
+    private final SecurityProperty securityProperty;
     private final UserService userService;
 
 
-    public UserApiController(JwtProperty jwtProperty, UserService userService) {
-        this.jwtProperty = jwtProperty;
+    public UserApiController(SecurityProperty securityProperty, UserService userService) {
+        this.securityProperty = securityProperty;
         this.userService = userService;
     }
 
@@ -38,15 +38,15 @@ public class UserApiController {
     public ResponseEntity<LoginVO> login(@RequestBody @Validated LoginDTO loginDTO) {
         UserBO userBO = userService.loginByEmail(loginDTO.email(), loginDTO.password());
 
-        JsonWebToken jwt = new JsonWebToken(jwtProperty.validityPeriod(),
-                jwtProperty.base64Secret(),
-                jwtProperty.algorithm());
+        JsonWebToken jwt = new JsonWebToken(securityProperty.jwt().validityPeriod(),
+                securityProperty.jwt().base64Secret(),
+                securityProperty.jwt().algorithm());
 
         UserVO userVO = UserVO.fromUserBO(userBO);
 
 
         String token = jwt.encoder()
-                .issuer(jwtProperty.issuer())
+                .issuer(securityProperty.jwt().issuer())
                 .subject(userBO.uuid().toString())
                 .compact();
         LoginVO loginVO = new LoginVO(userVO, token);
@@ -56,9 +56,9 @@ public class UserApiController {
 
     @GetMapping("/v1/token/verify")
     public ResponseEntity<VerifyVO> verifyToken(@RequestHeader(value = "Authorization") String token) {
-        JsonWebToken jwt = new JsonWebToken(jwtProperty.validityPeriod(),
-                jwtProperty.base64Secret(),
-                jwtProperty.algorithm());
+        JsonWebToken jwt = new JsonWebToken(securityProperty.jwt().validityPeriod(),
+                securityProperty.jwt().base64Secret(),
+                securityProperty.jwt().algorithm());
 
         String userUuid;
         try {

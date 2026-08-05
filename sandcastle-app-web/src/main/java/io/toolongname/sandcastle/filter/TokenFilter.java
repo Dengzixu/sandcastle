@@ -1,6 +1,6 @@
 package io.toolongname.sandcastle.filter;
 
-import io.toolongname.sandcastle.property.JwtProperty;
+import io.toolongname.sandcastle.property.SecurityProperty;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -21,10 +21,10 @@ public class TokenFilter extends OncePerRequestFilter {
         add("/user/api/v1/login");
     }};
 
-    private final JwtProperty jwtProperty;
+    private final SecurityProperty securityProperty;
 
-    public TokenFilter(JwtProperty jwtProperty) {
-        this.jwtProperty = jwtProperty;
+    public TokenFilter(SecurityProperty securityProperty) {
+        this.securityProperty = securityProperty;
     }
 
     @Override
