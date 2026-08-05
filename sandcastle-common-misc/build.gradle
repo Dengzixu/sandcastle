@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.7'
-    id 'io.spring.dependency-management' version '1.1.7'
+//    id 'org.springframework.boot' version '4.0.7'
+//    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'io.too-long-name'
@@ -15,6 +15,7 @@ java {
 }
 
 repositories {
+    maven { url 'https://maven.aliyun.com/repository/public/' }
     mavenCentral()
 }
 
@@ -22,9 +23,16 @@ dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.uuid/java-uuid-generator
     implementation 'com.fasterxml.uuid:java-uuid-generator:5.2.0'
 
-    implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.1.2'
+    // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:6.1.2'
+    // Source: https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+    testImplementation 'org.junit.platform:junit-platform-launcher:6.1.2'
+
+//    implementation 'org.springframework.boot:spring-boot-starter'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
