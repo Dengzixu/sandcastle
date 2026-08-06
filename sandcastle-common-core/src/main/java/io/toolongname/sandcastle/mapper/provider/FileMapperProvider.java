@@ -53,7 +53,7 @@ public class FileMapperProvider {
                 SET("password = #{password}");
             }
 
-            if (null != expireTimestamp && expireTimestamp >= 0) {
+            if (null != expireTimestamp && expireTimestamp > 0) {
                 SET("expire_timestamp = #{expireTimestamp}");
             }
 
