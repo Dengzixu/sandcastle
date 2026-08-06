@@ -3,8 +3,38 @@ package io.toolongname.sandcastle.mapper.provider;
 import org.apache.ibatis.jdbc.SQL;
 
 public class FileMapperProvider {
-
     private static final String SANDCASTLE_FILE_TABLE_NAME = "sandcastle_file";
+
+    public String listAllSql() {
+        return new SQL() {{
+            SELECT("*");
+            FROM(SANDCASTLE_FILE_TABLE_NAME);
+        }}.toString();
+    }
+
+    public String listByStatusSql(int status) {
+        return new SQL() {{
+            SELECT("*");
+            FROM(SANDCASTLE_FILE_TABLE_NAME);
+            WHERE("status & #{status}");
+        }}.toString();
+    }
+
+    public String listByExpireTimestampLesserThanSql(long timestamp) {
+        return new SQL() {{
+            SELECT("*");
+            FROM(SANDCASTLE_FILE_TABLE_NAME);
+            WHERE("expire_timestamp < #{timestamp}");
+        }}.toString();
+    }
+
+    public String listByExpireTimestampGreaterThanSql(long timestamp) {
+        return new SQL() {{
+            SELECT("*");
+            FROM(SANDCASTLE_FILE_TABLE_NAME);
+            WHERE("expire_timestamp > #{timestamp}");
+        }}.toString();
+    }
 
     public String addSqlBuilder() {
         return new SQL() {{

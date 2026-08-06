@@ -38,6 +38,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -248,6 +249,27 @@ public class FileServiceImpl implements FileService {
         status = status | Status.File.EXPIRED;
 
         fileMapper.modifyById(fileDO.getId(), status, null, null, 0L);
+    }
+
+    @Override
+    public List<FileBO> findExpireFile() {
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of(TimeZone.ASIA_SHANGHAI));
+        List<FileDO> fileDOList = fileMapper.listByExpireTimestampLesserThan(now.toEpochSecond());
+
+        return fileDOList.stream()
+                .filter(f -> !this.isDeleted(f.getStatus()))
+                .map(FileBO::fromFileDo).toList();
+    }
+
+    @Override
+    public List<FileBO> findAvailable() {
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of(TimeZone.ASIA_SHANGHAI));
+        List<FileDO> fileDOList = fileMapper.listByExpireTimestampGreaterThan(now.toEpochSecond());
+
+        return fileDOList.stream()
+                .filter(f -> !this.isDeleted(f.getStatus()))
+                .filter(f -> !this.isExpired(f.getStatus()))
+                .map(FileBO::fromFileDo).toList();
     }
 
     @Override

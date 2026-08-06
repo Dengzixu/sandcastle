@@ -1,5 +1,6 @@
 package io.toolongname.sandcastle.mapper;
 
+import io.toolongname.sandcastle.entity.bo.file.FileBO;
 import io.toolongname.sandcastle.entity.dataobject.file.FileDO;
 import io.toolongname.sandcastle.mapper.provider.FileMapperProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -8,11 +9,23 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
 @Repository
 public interface FileMapper {
+    @SelectProvider(type = FileMapperProvider.class, method = "listAllSql")
+    List<FileDO> listAll();
+
+    @SelectProvider(type = FileMapperProvider.class, method = "listByStatusSql")
+    List<FileDO> listByStatus(int status);
+
+    @SelectProvider(type = FileMapperProvider.class, method = "listByExpireTimestampLesserThanSql")
+    List<FileDO> listByExpireTimestampLesserThan(long timestamp);
+
+    @SelectProvider(type = FileMapperProvider.class, method = "listByExpireTimestampGreaterThanSql")
+    List<FileDO> listByExpireTimestampGreaterThan(long timestamp);
 
     @InsertProvider(type = FileMapperProvider.class, method = "addSqlBuilder")
     void add(byte[] uuid, byte[] userUuid, byte[] objectUuid, int status, long flag, String title,

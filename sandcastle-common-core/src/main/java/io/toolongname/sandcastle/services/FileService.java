@@ -6,6 +6,7 @@ import io.toolongname.sandcastlecommon.misc.constant.Constant;
 import io.toolongname.sandcastlecommon.misc.constant.Status;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 public interface FileService {
@@ -68,6 +69,24 @@ public interface FileService {
      * @param id 要标记为过期的文件 id
      */
     void markExpire(long id);
+
+    /**
+     * 查找所有已过期的文件。
+     *
+     * @return 已过期且未被删除的文件列表，每个元素为 {@link FileBO} 对象；
+     */
+    List<FileBO> findExpireFile();
+
+
+    /**
+     * 查找所有可用的文件。
+     * <p>
+     * 可用文件指未过期且未被删除的文件，其状态不包含 {@link Status.File#EXPIRED} 和 {@link Status.File#DELETED} 标志；
+     *
+     * @return 可用文件列表，每个元素为 {@link FileBO} 对象；
+     */
+    List<FileBO> findAvailable();
+
 
     /**
      * 根据对象 UUID 获取文件对象实体。
