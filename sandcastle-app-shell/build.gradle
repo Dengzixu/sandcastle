@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.7'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.graalvm.buildtools.native' version '0.11.5'
+}
+
+group = 'io.too-long-name'
+version = '0.0.1-SNAPSHOT'
+description = 'sandcastle-app-shell'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+    mavenCentral()
+}
+
+ext {
+    set('springShellVersion', "4.0.3")
+}
+
+dependencies {
+    implementation project(':sandcastle-common-core')
+    implementation project(':sandcastle-common-entity')
+    implementation project(':sandcastle-common-misc')
+    implementation project(':sandcastle-common-utils')
+
+     implementation "org.springframework.shell:spring-shell-starter:${springShellVersion}"
+    // Source: https://mvnrepository.com/artifact/org.springframework.shell/spring-shell-starter-jansi
+//     implementation "org.springframework.shell:spring-shell-starter-jansi:${springShellVersion}"
+    // Source: https://mvnrepository.com/artifact/org.springframework.shell/spring-shell-starter-ffm
+//    implementation "org.springframework.shell:spring-shell-starter-ffm:${springShellVersion}"
+    // Source: https://mvnrepository.com/artifact/org.springframework.shell/spring-shell-jline
+    implementation "org.springframework.shell:spring-shell-jline:${springShellVersion}"
+
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.shell:spring-shell-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.shell:spring-shell-dependencies:${springShellVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

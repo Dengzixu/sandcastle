@@ -1,5 +1,6 @@
 rootProject.name = 'sandcastle'
 
+include 'sandcastle-app-shell'
 include 'sandcastle-app-web'
 include 'sandcastle-common-core'
 include 'sandcastle-common-entity'
