@@ -1,0 +1,41 @@
+# IDE & OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Gradle cache and wrapper files
+build/
+.gradle/
+gradle/wrapper/gradle-wrapper.jar
+
+# Logs & reports
+*.log
+
+# Test source and classes
+**/test/**
+src/test/java/
+src/test/resources/
+
+# Temp files and documentation not needed in image
+temp/
+README.md
+.gitattributes
+database/sandcastle.sql
+
+# Git metadata
+.git
+
+# Sensitive config (not used in runtime image anyway)
+application.yml
+application-*.yml
+application.properties
+application-*.properties
+.env*
+
+# Docker self-excludes
+.dockerignore
+Dockerfile
+Dockerfile*
+*.Dockerfile
+compose.yaml
