@@ -1,6 +1,5 @@
 package io.toolongname.sandcastle.web;
 
-import io.toolongname.sandcastle.model.ResponseData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("")
 public class BaseController {
     @GetMapping("/ping")
-    public ResponseEntity<ResponseData> ping() {
-        return ResponseEntity.ok(ResponseData.SUCCEEDED("pong"));
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
+
+    @RequestMapping("/generate_204")
+    public ResponseEntity<Void> generate204() {
+        return ResponseEntity.noContent().build();
     }
 }

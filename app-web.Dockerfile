@@ -20,4 +20,6 @@ USER sandcastle
 
 ENTRYPOINT ["java", "-jar", "-XX:+UseContainerSupport", "/opt/sandcastle/sandcastle-app-web.jar"]
 
+HEALTHCHECK --timeout=5s --start-period=10s CMD curl -f http://localhost:8080/generate_204 || exit 1
+
 EXPOSE 8080
