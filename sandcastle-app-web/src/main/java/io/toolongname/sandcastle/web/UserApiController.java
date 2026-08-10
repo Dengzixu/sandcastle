@@ -29,7 +29,10 @@ public class UserApiController {
 
     @PostMapping("/v1/register")
     public ResponseEntity<Void> register(@RequestBody @Validated RegisterDTO registerDTO) {
-        userService.register(registerDTO.username(), registerDTO.email(), registerDTO.password());
+        userService.register(registerDTO.username(),
+                registerDTO.email(),
+                registerDTO.password(),
+                registerDTO.activeCode());
 
         return ResponseEntity.noContent().build();
     }

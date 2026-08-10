@@ -9,6 +9,14 @@ public interface Status {
         public static final int DELETED = 0b1000_0000_0000_0000_0000_0000;
     }
 
+    class ActiveCode {
+        // 默认状态
+        public static final int DEFAULT = 0b0000_0000_0000_0000_0000_0000;
+
+        // 使用过
+        public static final int USED = 0b0000_0000_0000_0000_0000_0001;
+    }
+
     class File {
         // 默认状态
         public static final int DEFAULT = 0b0000_0000_0000_0000_0000_0000;

@@ -7,6 +7,7 @@ public enum ErrorCode {
     USERNAME_DUPLICATE(-1000_0002, "用户名已被使用。"),
     EMAIL_DUPLICATE(-1000_0003, "邮箱已被使用。"),
     TOKEN_INVALID(-1000_1000, "身份验证失败, Token 无效或已过期"),
+    ACTIVE_CODE_INVALID(-1000_2001, "邀请码无效"),
 
     FILE_NOT_EXIST(-1001_0001, "文件不存在"),
     FILE_UPLOAD_FAILED(-1001_0002, "文件上传失败，内部错误"),
