@@ -88,16 +88,16 @@ public class FileApiController {
     }
 
     @GetMapping("/v1/list")
-    public ResponseEntity<List<FileVO>> getFieList(@JwtDecode Optional<String> userUuidOptional) {
+    public ResponseEntity<ListFileVO> getFieList(@JwtDecode Optional<String> userUuidOptional) {
         UUID userUuid = UUIDUtil.uuid(userUuidOptional.orElseThrow(TokenInvalidException::new));
 
         List<FileBO> fileBOList = fileService.listByUserUuid(userUuid);
 
-        List<FileVO> fileVOList = fileBOList
+        ListFileVO listFileVO = new ListFileVO(fileBOList
                 .stream()
                 .map(FileVO::fromFileBO)
-                .toList();
+                .toList());
 
-        return ResponseEntity.ok(fileVOList);
+        return ResponseEntity.ok(listFileVO);
     }
 }
