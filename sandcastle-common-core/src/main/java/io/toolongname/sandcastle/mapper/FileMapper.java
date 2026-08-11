@@ -39,4 +39,7 @@ public interface FileMapper {
 
     @UpdateProvider(type = FileMapperProvider.class, method = "modifyByIdSqlBuilder")
     void modifyById(long id, Integer status, Long flag, byte[] password, Long expireTimestamp);
+
+    @SelectProvider(type = FileMapperProvider.class, method = "listByUserUuidSql")
+    List<FileDO> listByUserUuid(byte[] userUuid);
 }

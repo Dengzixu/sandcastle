@@ -1,11 +1,15 @@
 package io.toolongname.sandcastle.services;
 
+import com.fasterxml.uuid.impl.UUIDUtil;
 import io.toolongname.sandcastle.entity.bo.file.FileBO;
 import io.toolongname.sandcastle.entity.bo.file.ObjectBO;
 import io.toolongname.sandcastlecommon.misc.constant.Constant;
 import io.toolongname.sandcastlecommon.misc.constant.Status;
+import io.toolongname.sandcastlecommon.misc.constant.TimeZone;
 
 import java.io.InputStream;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,10 +46,10 @@ public interface FileService {
      * @return 文件 UUID
      */
     FileBO publish(UUID fileUuid,
-                 @org.jspecify.annotations.Nullable Long flag,
-                 @org.jspecify.annotations.Nullable String password,
-                 int validityPeriod,
-                 UUID userUuid);
+                   @org.jspecify.annotations.Nullable Long flag,
+                   @org.jspecify.annotations.Nullable String password,
+                   int validityPeriod,
+                   UUID userUuid);
 
     /**
      * 根据文件 UUID 读取文件信息。
@@ -77,7 +81,6 @@ public interface FileService {
      */
     List<FileBO> findExpireFile();
 
-
     /**
      * 查找所有可用的文件。
      * <p>
@@ -87,6 +90,7 @@ public interface FileService {
      */
     List<FileBO> findAvailable();
 
+    List<FileBO> listByUserUuid(UUID userUuid);
 
     /**
      * 根据对象 UUID 获取文件对象实体。
@@ -102,6 +106,13 @@ public interface FileService {
 
     default boolean isExpired(int status) {
         return (status & Status.File.EXPIRED) == Status.File.EXPIRED;
+    }
+
+    default boolean isExpired(long timestamp) {
+        // 二次判断文件是否过期
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of(TimeZone.ASIA_SHANGHAI));
+
+        return timestamp <= now.toEpochSecond();
     }
 
     default boolean isDeleted(int status) {

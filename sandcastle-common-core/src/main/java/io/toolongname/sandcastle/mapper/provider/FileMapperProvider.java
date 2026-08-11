@@ -90,4 +90,12 @@ public class FileMapperProvider {
             WHERE("id = #{id}");
         }}.toString();
     }
+
+    public String listByUserUuidSql(){
+        return new SQL(){{
+            SELECT("*");
+            FROM(SANDCASTLE_FILE_TABLE_NAME);
+            WHERE("user_uuid = #{userUuid}");
+        }}.toString();
+    }
 }

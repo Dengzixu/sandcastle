@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -86,4 +87,17 @@ public class FileApiController {
         return ResponseEntity.ok(new GetFileVO(fileVO, objectVO));
     }
 
+    @GetMapping("/v1/list")
+    public ResponseEntity<List<FileVO>> getFieList(@JwtDecode Optional<String> userUuidOptional) {
+        UUID userUuid = UUIDUtil.uuid(userUuidOptional.orElseThrow(TokenInvalidException::new));
+
+        List<FileBO> fileBOList = fileService.listByUserUuid(userUuid);
+
+        List<FileVO> fileVOList = fileBOList
+                .stream()
+                .map(FileVO::fromFileBO)
+                .toList();
+
+        return ResponseEntity.ok(fileVOList);
+    }
 }

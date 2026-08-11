@@ -273,6 +273,18 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public List<FileBO> listByUserUuid(UUID userUuid) {
+        return fileMapper
+                .listByUserUuid(UUIDUtil.asByteArray(userUuid))
+                .stream()
+                .filter(f -> !this.isDeleted(f.getStatus()))
+                .filter(f -> !this.isExpired(f.getStatus()))
+                .filter(f -> !this.isExpired(f.getExpireTimestamp()))
+                .map(FileBO::fromFileDo)
+                .toList();
+    }
+
+    @Override
     public ObjectBO getObjectByUuid(UUID objectUuid) {
         ObjectDO objectDO = objectMapper.queryByUuid(UUIDUtil.asByteArray(objectUuid)).orElseThrow(FileNotExistException::new);
 
