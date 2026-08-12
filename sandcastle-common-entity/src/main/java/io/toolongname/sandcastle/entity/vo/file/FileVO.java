@@ -3,6 +3,7 @@ package io.toolongname.sandcastle.entity.vo.file;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.toolongname.sandcastle.entity.bo.file.FileBO;
+import io.toolongname.sandcastle.utils.Time;
 
 public record FileVO(long id,
                      @JsonProperty(value = "file_uuid")
@@ -16,6 +17,8 @@ public record FileVO(long id,
                      String title,
                      @JsonProperty(value = "content_type") String contentType,
                      String type,
+                     @JsonProperty(value = "expire_time")
+                     String expireTime,
                      @JsonProperty(value = "create_time") String createTime,
                      @JsonIgnore @JsonProperty(value = "modify_time") String modifyTime) {
 
@@ -29,6 +32,7 @@ public record FileVO(long id,
                 fileBO.title(),
                 fileBO.contentType(),
                 fileBO.type(),
+                Time.formatTimestamp(fileBO.expireTimestamp()),
                 fileBO.createTime(),
                 fileBO.modifyTime());
     }

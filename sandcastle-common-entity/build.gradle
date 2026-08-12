@@ -26,6 +26,8 @@ repositories {
 //}
 
 dependencies {
+    implementation project(':sandcastle-common-utils')
+
     // Source: https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
 
